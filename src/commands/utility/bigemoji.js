@@ -28,25 +28,25 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
+  async messageRun(message, args) {
     const emoji = args[0];
-    const response = getEmoji(message.author, emoji, data.lang);
+    const response = getEmoji(message.author, emoji);
     await message.safeReply(response);
   },
 
-  async interactionRun(interaction, dat) {
+  async interactionRun(interaction) {
     const emoji = interaction.options.getString("emoji");
-    const response = getEmoji(interaction.user, emoji, data.lang);
+    const response = getEmoji(interaction.user, emoji);
     await interaction.followUp(response);
   },
 };
 
-function getEmoji(user, emoji, lang) {
-  const l = lang.COMMANDS.UTILS.BIGEMOJIE
+function getEmoji(user, emoji) {
+
   const custom = parseEmoji(emoji);
 
   const embed = new EmbedBuilder()
-    .setAuthor({ name: l.AUTHOR })
+    .setAuthor({ name: "Enlarge Emojie" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: user.tag });
   if (custom.id) {
@@ -54,7 +54,7 @@ function getEmoji(user, emoji, lang) {
     return { embeds: [embed] };
   }
   const parsed = parse(emoji, { assetType: "png" });
-  if (!parsed[0]) return l.ERR ;
+  if (!parsed[0]) return "please provide valied emojie" ;
 
   embed.setImage(parsed[0].url);
   return { embeds: [embed] };

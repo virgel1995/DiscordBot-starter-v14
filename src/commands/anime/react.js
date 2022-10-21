@@ -69,11 +69,11 @@ const genReaction = async (category, user, lang) => {
     return new EmbedBuilder()
       .setImage(imageUrl)
       .setColor("Random")
-      .setFooter({ text: lang.REQ_BY.replace("author", user.tag) });
+      .setFooter({ text: user.tag });
   } catch (ex) {
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
-      .setDescription(lang.COMMANDS.ANIME.REACT.ERR)
-      .setFooter({ text: lang.REQ_BY.replace("author", user.tag) });
+      .setDescription("Ann error occored\n \`\`\`js\n" + ex.message + "\n\`\`\`")
+      .setFooter({ text: user.tag });
   }
 };

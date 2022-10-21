@@ -41,7 +41,7 @@ module.exports = {
   async messageRun(message, args, data) {
     const emoji = args[0];
      const name = args[1]
-    const response = await addEmojie(message, emoji, name, data.lang);
+    const response = await addEmojie(message, emoji, name);
     await message.safeReply(response);
   },
 
@@ -54,12 +54,12 @@ module.exports = {
      emoji = attachment.url
    }
  const name = interaction.options.getString("name")
-    const response = await addEmojie(interaction,emoji, name, data.lang);
+    const response = await addEmojie(interaction,emoji, name);
     await interaction.followUp(response);
   },
 };
 
-async function addEmojie({ guild }, emoji, name, lang) {
+async function addEmojie({ guild }, emoji, name) {
   const urlRegex = new RegExp(/^(ftp|http|https):\/\/[^ "]+$/);
 
 if (!emoji) 

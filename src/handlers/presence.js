@@ -57,6 +57,5 @@ client.user.setActivity(stat, {
 
 module.exports = function handlePresence(client) {
   updatePresence(client);
-  setInterval(() => updatePresence(client), 10 * 60 * 1000);
+  setInterval(() => updatePresence(client), 10 * 60 * 1000); //change activity every 10 minutes 
 };
-//1 * 60 * 1000

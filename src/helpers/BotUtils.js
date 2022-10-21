@@ -1,4 +1,5 @@
-const { getJson } = require("@helpers/HttpUtils");
+const config = require("@root/config"),
+{ getJson } = require("@helpers/HttpUtils");
 const { success, warn, error } = require("@helpers/Logger");
 
 module.exports = class BotUtils {
@@ -7,8 +8,12 @@ module.exports = class BotUtils {
    */
   
   static async checkForUpdates() {
-    const response = await getJson("https://api.github.com/repos/virgel1995/Pepsi/releases/latest");
+    const response = await getJson(config.CHECKGITHUBUPDATES.REPO + "/releases/latest");
+
+
+if(config.CHECKGITHUBUPDATES.ENABLED){
     if (!response.success) return error("VersionCheck: Failed to check for bot updates");
+
     if (response.data) {
       if (
         require("@root/package.json").version.replace(/[^0-9]/g, "") >= response.data.tag_name.replace(/[^0-9]/g, "")
@@ -16,9 +21,11 @@ module.exports = class BotUtils {
         success("VersionCheck: Your discord bot is up to date");
       } else {
         warn(`VersionCheck: ${response.data.tag_name} update is available`);
-        warn("download: https://github.com/virgel1995/Pepsi/releases/latest");
+        warn("download: https://github.com/virgel1995/DiscordBot-starter-v14/releases/latest");
       }
     }
+}
+
   }
 
   /**

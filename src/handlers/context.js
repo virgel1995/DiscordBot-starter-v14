@@ -18,18 +18,9 @@ const settings = await getSettings(interaction.guild);
 
     const userDb = await getUser(interaction.user);
 
-  let language = userDb.lang;
-
-  if (!language) language = "en";
-
-  const lang = require(`@root/lang/bot/${language}`);
-      
-      
-
     const data = {};
     data.settings = settings;
     data.userDb = userDb;
-    data.lang = lang
       
       
     // check cooldown

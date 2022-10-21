@@ -3,11 +3,21 @@ module.exports = {
   OWNER_IDS: ["799984138111287337"],// Bot owner ID's
   PREFIX: ".", // Default prefix for the bot
   SUPPORT_SERVER: "https://discord.gg/WsJp96BK22", 
+CHECKGITHUBUPDATES: {
+ENABLED : false,
+REPO: "https://api.github.com/repos/virgel1995/DiscordBot-starter-v14"
+},
+  // check updates from github release 
+
   INTERACTIONS: {
     SLASH: true, // Should the interactions be enabled
     CONTEXT: true, // Should contexts be enabled
     GLOBAL: true, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
+  },
+	IMAGE: {
+    ENABLED: false,
+    BASE_API: "https://image-api.strangebot.xyz",
   },
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",

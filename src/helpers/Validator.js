@@ -20,21 +20,6 @@ module.exports = class Validator {
       process.exit(1);
     }
 
-    // Validate Dashboard Config
-    if (config.DASHBOARD.enabled) {
-      if (!process.env.BOT_SECRET) {
-        error("env: BOT_SECRET cannot be empty");
-        process.exit(1);
-      }
-      if (!process.env.SESSION_PASSWORD) {
-        error("env: SESSION_PASSWORD cannot be empty");
-        process.exit(1);
-      }
-      if (!config.DASHBOARD.baseURL || !config.DASHBOARD.failureURL || !config.DASHBOARD.port) {
-        error("config.js: DASHBOARD details cannot be empty");
-        process.exit(1);
-      }
-    }
 
     // Cache Size
     if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.MEMBERS)) {
@@ -45,15 +30,6 @@ module.exports = class Validator {
     // Warnings
     if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
     if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
-    if (!process.env.WEATHERSTACK_KEY) warn("env: WEATHERSTACK_KEY is missing. Weather command won't work");
-    if (config.ERELA_JS.ENABLED) {
-      if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
-        warn("env: SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET are missing. Spotify music won't work in ErelaJS");
-      }
-      if (config.ERELA_JS.NODES.length == 0) {
-        warn("config.js: ErelaJS must at least one node");
-      }
-    }
   }
 
   /**

@@ -15,10 +15,10 @@ module.exports = {
   },
 
   async messageRun(message, args,data) {
-    await message.safeReply(data.lang.COMMANDS.INFORMATION.PING_COMMAND.REPLY.replace("{ping}", Math.floor(message.client.ws.ping)));
+    await message.safeReply("Web socket " + Math.floor(message.client.ws.ping) + "ms");
   },
 
-  async interactionRun(interaction,data) {
-    await interaction.followUp(data.lang.COMMANDS.INFORMATION.PING_COMMAND.REPLY.replace("{ping}", Math.floor(interaction.client.ws.ping)));
+  async interactionRun(interaction) {
+    await interaction.followUp("Web socket " + Math.floor(interaction.client.ws.ping) + "ms");
   },
 };

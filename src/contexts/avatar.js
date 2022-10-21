@@ -13,12 +13,12 @@ module.exports = {
 
   async run(interaction, data) {
     const user = await interaction.client.users.fetch(interaction.targetId);
-    const response = getAvatar(user, data.lang);
+    const response = getAvatar(user);
     await interaction.followUp(response);
   },
 };
 
-function getAvatar(user, lang) {
+function getAvatar(user) {
   const x64 = user.displayAvatarURL({ extension: "png", size: 64 });
   const x128 = user.displayAvatarURL({ extension: "png", size: 128 });
   const x256 = user.displayAvatarURL({ extension: "png", size: 256 });
@@ -27,11 +27,11 @@ function getAvatar(user, lang) {
   const x2048 = user.displayAvatarURL({ extension: "png", size: 2048 });
 
   const embed = new EmbedBuilder()
-    .setTitle(lang.CONTEXT.AVATAR.TITLE + ` ${user.username}`)
+    .setTitle(`Avatar for ${user.username}`)
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setImage(x256)
     .setDescription(
-      lang.CONTEXT.AVATAR.HEAD + `: • [x64](${x64}) ` +
+       `Links : • [x64](${x64}) ` +
         `• [x128](${x128}) ` +
         `• [x256](${x256}) ` +
         `• [x512](${x512}) ` +

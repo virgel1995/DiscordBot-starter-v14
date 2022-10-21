@@ -20,16 +20,12 @@ module.exports = {
 
   const userDb = await getUser(message.author);
 
-  let language = userDb.lang;
-  if (!language) language = "en";
-  const lang = require(`@root/lang/bot/${language}`);
 
     const data = {};
     data.settings = settings;
     data.userDb = userDb;
     data.prefix = prefix;
     data.invoke = invoke;
-    data.lang = lang
     if (!message.channel.permissionsFor(message.guild.members.me).has("SendMessages")) return;
 
     // callback validations
@@ -147,14 +143,10 @@ module.exports = {
       await interaction.deferReply({ ephemeral: cmd.slashCommand.ephemeral });
       const settings = await getSettings(interaction.guild);
     const userDb = await getUser(interaction.user);
-  let language = userDb.lang;
-  if (!language) language = "en";
-  const lang = require(`@root/lang/bot/${language}`);
 /************ Run intractions *****/
       await cmd.interactionRun(interaction, { 
         settings,
-        userDb,
-        lang
+        userDb
       });
     } catch (ex) {
       await interaction.followUp("Oops! An error occurred while running the command");

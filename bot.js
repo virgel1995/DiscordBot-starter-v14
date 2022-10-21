@@ -1,6 +1,6 @@
 require('module-alias/register');
 require("dotenv").config();
-//require("./Manger.js")
+
 // register extenders
 require("@helpers/extenders/Message");
 require("@helpers/extenders/Guild");

@@ -13,7 +13,6 @@ const { recursiveReadDirSync } = require("../helpers/Utils");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
-const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
 
 module.exports = class BotClient extends Client {
@@ -36,14 +35,10 @@ module.exports = class BotClient extends Client {
                            } ,
       ws : { properties : { $browser : "Discord Android"}} ,
       restRequestTimeout: 20000,
-    /*    
-	shards: "auto",
-   // shardCount: 2,*/
     });
 
     this.wait = require("util").promisify(setTimeout); // await client.wait(1000) - Wait 1 second
     this.config = require("@root/config"); // load the config file
-   this.emojie = require("@src/emojie")
 
     /**
      * @type {import('@structures/Command')[]}
@@ -67,9 +62,6 @@ module.exports = class BotClient extends Client {
       ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
       : undefined;
 
-
-    // Giveaways
-    if (this.config.GIVEAWAYS.ENABLED) this.giveawaysManager = giveawaysHandler(this);
 
     // Logger
     this.logger = Logger;

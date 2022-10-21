@@ -68,15 +68,14 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
+  async messageRun(message, args) {
     const image = await getImageFromMessage(message, args);
 
-   let l = data.lang.COMMANDS.IMAGE.FILTER
     // use invoke as an endpoint
-    const url = getGenerator(data.invoke.toLowerCase(), image, data.lang);
+    const url = getGenerator(data.invoke.toLowerCase(), image);
     const response = await getBuffer(url);
 
-    if (!response.success) return message.safeReply(l.ERR);
+    if (!response.success) return message.safeReply("Sorry but this api have an err");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -87,9 +86,8 @@ module.exports = {
     await message.safeReply({ embeds: [embed], files: [attachment] });
   },
 
-  async interactionRun(interaction, data) {
+  async interactionRun(interaction) {
       
-   let l = data.lang.COMMANDS.IMAGE.FILTER
     const author = interaction.user;
     const user = interaction.options.getUser("user");
     const imageLink = interaction.options.getString("link");
@@ -100,10 +98,10 @@ module.exports = {
     if (!image && imageLink) image = imageLink;
     if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
-    const url = getGenerator(generator, image, data.lang);
+    const url = getGenerator(generator, image);
     const response = await getBuffer(url);
 
-    if (!response.success) return interaction.followUp(l.ERR);
+    if (!response.success) return interaction.followUp("Sorry but this api have an err");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -115,7 +113,7 @@ module.exports = {
   },
 };
 
-function getGenerator(genName, image, lang) {
+function getGenerator(genName, image) {
   const endpoint = new URL(`${IMAGE.BASE_API}/generators/${genName}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;

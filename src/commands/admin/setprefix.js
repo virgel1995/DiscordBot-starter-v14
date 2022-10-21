@@ -28,20 +28,20 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const newPrefix = args[0];
-    const response = await setNewPrefix(newPrefix, data.settings, data.lang);
+    const response = await setNewPrefix(newPrefix, data.settings);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {
-    const response = await setNewPrefix(interaction.options.getString("newprefix"), data.settings, data.lang);
+    const response = await setNewPrefix(interaction.options.getString("newprefix"), data.settings);
     await interaction.followUp(response);
   },
 };
 
-async function setNewPrefix(newPrefix, settings, lang) {
-  if (newPrefix.length > 2) return lang.COMMANDS.ADMIN.SET_PREFIX.ERR;
+async function setNewPrefix(newPrefix, settings) {
+  if (newPrefix.length > 2) return "perfix must be les than 3 characters";
   settings.prefix = newPrefix;
   await settings.save();
 
-  return `${lang.COMMANDS.ADMIN.SET_PREFIX.DONE} \`${newPrefix}\``;
+  return `Successfully changed prefix to => \`${newPrefix}\``;
 }

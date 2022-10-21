@@ -40,15 +40,13 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-      
-
     let trigger = args[0];
 
     // !help
     if (!trigger) {
-      const response = await getHelpMenu(message, data.lang);
+      const response = await getHelpMenu(message);
       const sentMsg = await message.safeReply(response);
-      return waiter(sentMsg, message.author.id, data.prefix, data.lang);
+      return waiter(sentMsg, message.author.id, data.prefix);
     }
 
     // check if command help (!help cat)
@@ -59,17 +57,17 @@ module.exports = {
     }
 
     // No matching command/category found
-    await message.safeReply(data.lang.COMMANDS.UTILS.HELP.NO_MATCH);
+    await message.safeReply("No matching command found");
   },
 
-  async interactionRun(interaction, data) {
+  async interactionRun(interaction) {
     let cmdName = interaction.options.getString("command");
 
     // !help
     if (!cmdName) {
-      const response = await getHelpMenu(interaction, data.lang);
+      const response = await getHelpMenu(interaction);
       const sentMsg = await interaction.followUp(response);
-      return waiter(sentMsg, interaction.user.id, data.lang);
+      return waiter(sentMsg, interaction.user.id);
     }
 
     // check if command help (!help cat)
@@ -80,15 +78,14 @@ module.exports = {
     }
 
     // No matching command/category found
-    await interaction.followUp(data.lang.COMMANDS.UTILS.HELP.NO_MATCH);
+    await interaction.followUp("No matching command found");
   },
 };
 
 /**
  * @param {CommandInteraction} interaction
  */
-async function getHelpMenu({ client, guild }, lang) {
-const l = lang.COMMANDS.UTILS.HELP
+async function getHelpMenu({ client, guild }) {
   // Menu Row
   const options = [];
   for (const [k, v] of Object.entries(CommandCategory)) {
@@ -96,13 +93,13 @@ const l = lang.COMMANDS.UTILS.HELP
     options.push({
       label: v.name,
       value: k,
-      description: l.DESC + ` ${v.name} ` + l.CAT,
+      description: `View commands in ${v.name} category`,
       emoji: v.emoji,
     });
   }
 
   const menuRow = new ActionRowBuilder().addComponents(
-    new SelectMenuBuilder().setCustomId("help-menu").setPlaceholder(l.PLACEHOLDER).addOptions(options)
+    new SelectMenuBuilder().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)
   );
 
   // Buttons Row
@@ -118,11 +115,11 @@ const l = lang.COMMANDS.UTILS.HELP
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(
-      l.EDESC +
-        l.EDESC1 + `${guild.members.me.displayName}!\n` +
-       l.EDESC2  +
-        `**${l.EDESC3}:** [Here](${client.getInvite()})\n` +
-        `**${l.SUPP}:** [Join](${SUPPORT_SERVER})`
+      "**About Me:**\n" +
+        `Hello I am ${guild.members.me.displayName}!\n` +
+        "A cool multipurpose discord bot which can serve all your needs\n\n" +
+        `**Invite Me:** [Here](${client.getInvite()})\n` +
+        `**Support Server:** [Join](${SUPPORT_SERVER})`
     );
 
   return {
@@ -136,8 +133,7 @@ const l = lang.COMMANDS.UTILS.HELP
  * @param {string} userId
  * @param {string} prefix
  */
-const waiter = (msg, userId, prefix, lang) => {
-  const l = lang.COMMANDS.UTILS.HELP
+const waiter = (msg, userId, prefix) => {
   const collector = msg.channel.createMessageComponentCollector({
     filter: (reactor) => reactor.user.id === userId && msg.id === reactor.message.id,
     idle: IDLE_TIMEOUT * 1000,
@@ -153,11 +149,10 @@ const waiter = (msg, userId, prefix, lang) => {
   collector.on("collect", async (response) => {
     if (!["help-menu", "previousBtn", "nextBtn"].includes(response.customId)) return;
     await response.deferUpdate();
-
-    switch (response.customId) {
+switch (response.customId) {
       case "help-menu": {
         const cat = response.values[0].toUpperCase();
-        arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix, lang) : getSlashCategoryEmbeds(msg.client, cat, lang);
+        arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
 
         // Buttons Row
@@ -198,8 +193,7 @@ const waiter = (msg, userId, prefix, lang) => {
  * @param {BotClient} client
  * @param {string} category
  */
-function getSlashCategoryEmbeds(client, category, lang) {
- const l = lang.COMMANDS.UTILS.HELP
+function getSlashCategoryEmbeds(client, category) {
   let collector = "";
 
   // For IMAGE Category
@@ -219,9 +213,8 @@ function getSlashCategoryEmbeds(client, category, lang) {
       .join(", ");
 
     collector +=
-      l.FILTER + `${availableFilters}` + `*\n\n**${l.GENRATOR}**\n` + `${availableGens}`;
-
-    const embed = new EmbedBuilder()
+      "**Available Filters:**\n" + `${availableFilters}` + `*\n\n**Available Generators**\n` + `${availableGens}`;
+const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -237,8 +230,8 @@ function getSlashCategoryEmbeds(client, category, lang) {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} ` + l.CMD })
-      .setDescription(l.NO_CMD);
+      .setAuthor({ name: `${category} Commands` })
+      .setDescription("No commands in this category");
 
     return [embed];
   }
@@ -253,8 +246,8 @@ function getSlashCategoryEmbeds(client, category, lang) {
       const subCmds = cmd.slashCommand.options?.filter((opt) => opt.type === "SUB_COMMAND");
       const subCmdsString = subCmds?.map((s) => s.name).join(", ");
 
-      return `\`/${cmd.name}\`\n ❯ **${l.FDESC}**: ${cmd.description}\n ${
-        !subCmds?.length ? "" : `❯ **${l.FSUB} [${subCmds?.length}]**: ${subCmdsString}\n`
+      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
+        !subCmds?.length ? "" : `❯ **SubCommands [${subCmds?.length}]**: ${subCmdsString}\n`
       } `;
     });
 
@@ -265,7 +258,7 @@ function getSlashCategoryEmbeds(client, category, lang) {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} ` + l.CMD })
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
       .setFooter({ text: `page ${index + 1} of ${arrSplitted.length}` });
     arrEmbeds.push(embed);
@@ -280,8 +273,7 @@ function getSlashCategoryEmbeds(client, category, lang) {
  * @param {string} category
  * @param {string} prefix
  */
-function getMsgCategoryEmbeds(client, category, prefix, lang) {
-const l = lang.COMMANDS.UTILS.HELP
+function getMsgCategoryEmbeds(client, category, prefix) {
   let collector = "";
 
   // For IMAGE Category
@@ -295,11 +287,11 @@ const l = lang.COMMANDS.UTILS.HELP
       );
 
     collector +=
-      l.BDESC +
-      `**${prefix}cmd:** `+ l.BDESC1 +
-      `**${prefix}cmd <@member>:** ` + l.BDESC2 +
-      `**${prefix}cmd <url>:** ` + l.BDESC3 +
-      `**${prefix}cmd [attachment]:** ` + l.BDESC4;
+      "\n\nYou can use these image commands in following formats\n" +
+      `**${prefix}cmd:** Picks message authors avatar as image\n` +
+      `**${prefix}cmd <@member>:** Picks mentioned members avatar as image\n` +
+      `**${prefix}cmd <url>:** Picks image from provided URL\n` +
+      `**${prefix}cmd [attachment]:** Picks attachment image`;
 
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
@@ -317,8 +309,8 @@ const l = lang.COMMANDS.UTILS.HELP
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} ` + l.CMD })
-      .setDescription(l.NO_CMD);
+      .setAuthor({ name: `${category} Commands` })
+      .setDescription("No commands in this category");
 
     return [embed];
   }
@@ -345,4 +337,4 @@ const l = lang.COMMANDS.UTILS.HELP
   });
 
   return arrEmbeds;
-}
+	}

@@ -45,14 +45,13 @@ module.exports = {
 
   async messageRun(message, args, data) {
       
-   let l = data.lang.COMMANDS.IMAGE.FILTER
     const image = await getImageFromMessage(message, args);
 
     // use invoke as an endpoint
-    const url = getFilter(data.invoke.toLowerCase(), image, data.lang);
+    const url = getFilter(data.invoke.toLowerCase(), image);
     const response = await getBuffer(url);
 
-    if (!response.success) return message.safeReply(l.ERR);
+    if (!response.success) return message.safeReply("Sorry but this api have an err");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -64,7 +63,6 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-   let l = data.lang.COMMANDS.IMAGE.FILTER
     const author = interaction.user;
     const user = interaction.options.getUser("user");
     const imageLink = interaction.options.getString("link");
@@ -78,7 +76,7 @@ module.exports = {
     const url = getFilter(filter, image);
     const response = await getBuffer(url);
 
-    if (!response.success) return interaction.followUp(l.ERR);
+    if (!response.success) return interaction.followUp("Sorry but this api have an err");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -90,7 +88,7 @@ module.exports = {
   },
 };
 
-function getFilter(filter, image, lang) {
+function getFilter(filter, image) {
   const endpoint = new URL(`${IMAGE.BASE_API}/filters/${filter}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
