@@ -1,0 +1,96 @@
+{
+  "name": "pepsi-bot",
+  "version": "0.0.1",
+  "description": "An open-source, multipurpose discord bot built using discord-js V14",
+  "main": "bot.js",
+  "author": "Virus24",
+  "license": "ISC",
+  "engines": {
+    "node": ">=16.9.0"
+  },
+  "scripts": {
+    "dev": "node .",
+    "start": "node ."
+  },
+  "homepage": "https://github.com/virgel1995/pepsi#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virgel1995/pepsi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/virgel1995/pepsi/issues"
+  },
+  "dependencies": {
+    "@vitalets/google-translate-api": "^8.0.0",
+    "ascii-table": "0.0.9",
+    "btoa": "^1.2.1",
+    "canvas": "^2.10.1",
+    "common-tags": "^1.8.2",
+    "connect-flash": "^0.1.1",
+    "country-emoji-languages": "^1.0.0",
+    "discord-giveaways": "^6.0.1",
+    "discord-together": "^1.3.31",
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.2",
+    "ejs": "^3.1.8",
+    "enhanced-ms": "^1.0.2",
+    "erela.js": "github:menudocs/erela.js#build",
+    "erela.js-deezer": "^1.0.7",
+    "erela.js-facebook": "^1.0.4",
+    "erela.js-spotify": "^1.2.0",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "fixedsize-map": "^1.0.1",
+    "fs": "0.0.2",
+    "iso-639-1": "^2.1.15",
+    "lodash": "^4.17.21",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.4",
+    "mongoose": "^6.5.0",
+    "nekos.life": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "os": "^0.1.2",
+    "pino": "^8.3.1",
+    "pino-pretty": "^8.1.0",
+    "pretty-ms": "^7.0.1",
+    "request": "^2.88.2",
+    "snakecord": "^1.0.9",
+    "sourcebin_js": "^0.0.3-ignore",
+    "string-progressbar": "^1.0.4",
+    "table": "^6.8.0",
+    "timestamp-to-date": "^1.1.0",
+      "cookie-parser": "^1.4.6",
+      "helmet": "^6.0.0",
+      "discord-virus24": "^1.0.4",
+    "twemoji-parser": "^14.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "erlpack": "^0.1.4",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-plugin-jsdoc": "^39.3.6",
+    "nodemon": "^2.0.19",
+    "prettier": "2.7.1"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "discord-bot",
+    "open-source",
+    "bot",
+    "multipurpose",
+    "multi-purpose-bot"
+  ],
+  "_moduleAliases": {
+    "@root": ".",
+    "@handlers": "src/handlers/",
+    "@helpers": "src/helpers/",
+    "@schemas": "src/database/schemas/",
+    "@src": "src/",
+    "@structures": "src/structures/"
+  }
+}
